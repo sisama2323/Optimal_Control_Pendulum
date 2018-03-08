@@ -118,7 +118,7 @@ def visualization(theta, u, title, saveanimate = False):
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         ani = animation.FuncAnimation(fig, animate, np.arange(1, t.shape[0]),
                             interval=25, blit=True, init_func=init)
-        ani.save((title + "_%d.mp4" %(cf.w_step)), writer=writer)
+        ani.save(("video/" + title + "_%f.mp4" %(cf.w_step)), writer=writer)
 
     else:
         ani = animation.FuncAnimation(fig, animate, np.arange(1, t.shape[0]),

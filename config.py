@@ -6,7 +6,7 @@ class cf:
     b=0.2
     sigma = np.eye(2,2) * 0.2
     k=1
-    r=0.00005
+    r=0.03
     
     # discount factor
     gamma=0.9
@@ -19,8 +19,8 @@ class cf:
     dt = 0.1
     theta_step = 0.1
     w_max = 2
-    w_step = theta_step / dt * 0.2
-    # w_step = 0.5
+    # w_step = theta_step / dt * 0.2
+    w_step = 0.4
     
     u_max = 3
     u_step = theta_step / dt * 0.2
@@ -33,7 +33,7 @@ class cf:
     theta = np.arange(-3.14, 3.14+0.0001, theta_step)
     theta_l = (np.floor(theta*100)).astype(int)
     
-    w = np.arange(-w_max, w_max, w_step)
+    w = np.arange(-w_max, w_max+w_step, w_step)
     w_l = (np.floor(w*100)).astype(int)
 
     x = []

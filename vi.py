@@ -25,7 +25,7 @@ print(['Angular Velocity', cf.w_step])
 print(['Control', cf.u_step])
 
 
-values = np.random.rand(np.size(cf.x, 0)).tolist() * 100
+values = (np.random.rand(np.size(cf.x, 0)) * 100).tolist()
 cc = tuple([tuple(row) for row in cf.x])
 V = dict(zip(cc, values))
 # optimal contol
@@ -73,7 +73,7 @@ visualization(np.array(theta_seq), np.array(u_seq), 'VI', cf.saveanimate)
 
 fig,ax = plt.subplots()
 ax.imshow(policy_m)
-ax.colorbar()
+plt.colorbar()
 ax.set_xticks(cf.w)
 ax.set_xticklabels('Angular Velocity')
 ax.set_yticks(cf.theta)
