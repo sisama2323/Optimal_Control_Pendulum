@@ -6,6 +6,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from scipy.interpolate import griddata
+from scipy import interpolate
 
 # compute cost
 def computecost(x, u):
@@ -18,12 +20,11 @@ def gassian(mean, cov, x):
     return y
 
 def wrap(x):
+    t = int(abs(x / 3.14159))
     if x < -3.14:
-        t = abs((x + 3.14) % (3.14 * 2.))
-        x = x + 3.14 * 2. * t
+        x = x + 3.14159 * 2. * t
     if x > 3.14:
-        t = abs((x - 3.14) % (3.14 * 2.))
-        x = x - 3.14 * 2. * t
+        x = x - 3.14159 * 2. * t
     return x
 
 def new_point(x, max, step, cov, olist):
@@ -62,22 +63,37 @@ def motion(x, u):
     prob = prob / sum(prob)
     return np.array(new_x), prob
 
-def findseq(x0, policy):
+# interpolate the policy to continous space
+# def interpolation(x , tck):
+#     '''
+#     interpolation
+#     '''
+#     # grid_z1 = griddata(np.array(policy.keys()), np.array(policy.values()), (x[0], x[1]), method='linear')
+#     z = interpolate.bisplev(x[0], x[1], tck)
+#     return z
+
+
+def findseq(x0, f):
     theta_seq = []
     theta_seq.append(x0[0])
     u_seq = []
     t = 0
     while t <= cf.T:
         x_list = np.floor(x0*100).astype(int).tolist()
-        u = policy[tuple(x_list)]
+        u = f(x0[0], x0[1])
+        # u = policy[tuple(x_list)]
         u_seq.append(u)
-        xs, prob = motion(x0, u)
-        x_new = xs[np.argmin(prob)]
-        theta_seq.append(x_new[0])
-        x0 = x_new
+        # motion model
+        fx = np.array([x0[1], cf.a * np.sin(x0[0])- cf.b * x0[1] + u])
+        x_bar = x0 + fx * cf.dt
+        x_bar[0] = wrap(x_bar[0])
+
+        theta_seq.append(x_bar[0])
+        x0 = x_bar
         t += cf.dt
+    
     x_list = np.floor(x0*100).astype(int).tolist()
-    u = policy[tuple(x_list)]
+    u = f(x_list[0], x_list[1])
     u_seq.append(u)
     return theta_seq, u_seq
 

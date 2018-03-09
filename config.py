@@ -2,11 +2,13 @@ import numpy as np
 import math
 
 class cf:
-    a=1
-    b=0.2
+
+    # motion model and cost parameter
+    a = 1
+    b = 0.1
     sigma = np.eye(2,2) * 0.2
-    k=1
-    r=0.03
+    k = 0.8
+    r = 0.001
     
     # discount factor
     gamma=0.9
@@ -16,14 +18,14 @@ class cf:
     discretization:
     change theta step size will automatically change w step size, and control step size
     '''
-    dt = 0.1
-    theta_step = 0.1
-    w_max = 2
+    dt = 0.05
+    theta_step = 0.05
+    w_max = 4
     # w_step = theta_step / dt * 0.2
-    w_step = 0.4
+    w_step = 0.2
     
-    u_max = 3
-    u_step = theta_step / dt * 0.2
+    u_max = 4
+    u_step = 0.2
 
     # plan horizon
     T = 20
@@ -43,7 +45,7 @@ class cf:
     x = np.array(x)
 
     # value iteration
-    diff_ep = 5
+    diff_ep = 0.1
 
     # save animation
     saveanimate = True

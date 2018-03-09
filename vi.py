@@ -25,7 +25,7 @@ print(['Angular Velocity', cf.w_step])
 print(['Control', cf.u_step])
 
 
-values = (np.random.rand(np.size(cf.x, 0)) * 100).tolist()
+values = (np.random.rand(np.size(cf.x, 0)) * 10).tolist()
 cc = tuple([tuple(row) for row in cf.x])
 V = dict(zip(cc, values))
 # optimal contol
@@ -67,19 +67,22 @@ while diff >= cf.diff_ep:
     
 # get traj
 # initial state 
-x0 = np.array(V.keys()[2]) / 100.
-theta_seq, u_seq = findseq(x0, policy)
+
+# interpolation
+f = interpolate.interp2d(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), kind='cubic')
+# tck = interpolate.bisplrep(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), s=0)
+x0 = np.array(V.keys()[10]) / 100.
+theta_seq, u_seq = findseq(x0, f)
 visualization(np.array(theta_seq), np.array(u_seq), 'VI', cf.saveanimate)
 
-fig,ax = plt.subplots()
+fig, ax = plt.subplots()
 ax.imshow(policy_m)
-plt.colorbar()
 ax.set_xticks(cf.w)
 ax.set_xticklabels('Angular Velocity')
 ax.set_yticks(cf.theta)
 ax.set_yticklabels('theta')
+plt.savefig('video/VI_noise_%s_step_%s.jpg' %(cf.sigma, cf.theta_step))
 plt.show()
-
 
 a = 5
 
