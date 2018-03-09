@@ -1,6 +1,8 @@
 import numpy as np
 from config import cf
 from util import *
+import pickle
+
 
 
 '''
@@ -25,64 +27,96 @@ print(['Angular Velocity', cf.w_step])
 print(['Control', cf.u_step])
 
 
-values = (np.random.rand(np.size(cf.x, 0)) * 10).tolist()
-cc = tuple([tuple(row) for row in cf.x])
-V = dict(zip(cc, values))
+# row is theta
+# col is w
+V = np.random.rand(len(cf.theta), len(cf.w)) * 10
 # optimal contol
-policy = {}
-policy_m = np.zeros((len(cf.theta), len(cf.w)))
+policy = np.zeros((len(cf.theta), len(cf.w)))
+q = np.zeros((len(cf.theta), len(cf.w)))
 
 diff = 1000000
 k = 0
 while diff >= cf.diff_ep:
-    old_V = V.copy()
-    for x in cf.x:
-        x_d = x / 100.
-        bl = []
-        for u in cf.u:
-            cost = computecost(x_d, u)
-            x_new, prob = motion(x_d, u)
-            # if (x_new*100).astype(int)[0][0] == -253:
-            #     print('aaaaaaaaaaaaaaaaaa')
-            # convert x to keys
-            x_new = np.floor(x_new*100).astype(int).tolist()
-            Vk = np.array([old_V[tuple(i)] for i in x_new])
-            bl.append(sum(Vk * prob) * cf.gamma + cost)
+    diff = 0
+    for row, theta in enumerate(cf.theta):
+        for col, w  in enumerate(cf.w):
+            x = np.array([theta, w])
+            # optimal V value
+            bl = []
+            for u in cf.u:
+                cost = computecost(x, u)
+                x_new, prob = motion(x, u)
+                Vk = []
+                for xx in x_new:
+                    r, c = findind(xx)
+                    Vk.append(V[r, c])
+                Vk = np.array(Vk)
+                bl.append(sum(Vk * prob) * cf.gamma + cost)
 
-        # update value
-        # x_keys = np.floor(x*100).astype(int).tolist()
-        V[tuple(x)] = np.min(bl)
-        # update policy
-        optima_u = cf.u[np.argmin(bl)]
-        policy[tuple(x)] = optima_u
-        # print(['cost', cost])
-        # print(['bl', bl])
-        
-        policy_m[np.where(cf.theta_l == x[0]), np.where(cf.w_l == x[1])] = optima_u
-        
+            # update value
+            # x_keys = np.floor(x*100).astype(int).tolist()
+            diff += abs(V[row, col] - np.min(bl))
+            V[row, col] = np.min(bl)
+            # update policy
+            optima_u = cf.u[np.argmin(bl)]
+            policy[row, col] = optima_u
+            q[row, col] = 1 - np.exp(cf.k * np.cos(x[0]) - cf.k)
+            # print(['cost', cost])
+            # print(['bl', bl])
+                        
     
     k += 1
-    diff = sum(abs(np.array(np.sort(V.values())) - np.array(np.sort(old_V.values()))))
+    # diff = sum(abs(np.array(V.values()) - np.array(old_V.values())))
     print([['step', k], ['diff', diff]])
     
-# get traj
-# initial state 
+# Saving the objects:
+with open('plot/vi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
+    pickle.dump(policy, f)
 
 # interpolation
-f = interpolate.interp2d(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), kind='cubic')
+# f = interpolate.interp2d(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), kind='cubic')
 # tck = interpolate.bisplrep(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), s=0)
-x0 = np.array(V.keys()[10]) / 100.
-theta_seq, u_seq = findseq(x0, f)
+x0 = np.array([1.4, 0])
+theta_seq, u_seq = findseq(x0, policy)
 visualization(np.array(theta_seq), np.array(u_seq), 'VI', cf.saveanimate)
 
 fig, ax = plt.subplots()
-ax.imshow(policy_m)
-ax.set_xticks(cf.w)
-ax.set_xticklabels('Angular Velocity')
-ax.set_yticks(cf.theta)
-ax.set_yticklabels('theta')
-plt.savefig('video/VI_noise_%s_step_%s.jpg' %(cf.sigma, cf.theta_step))
-plt.show()
+ax.imshow(policy)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Policy')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/VI_policy_step_%s.jpg' %(cf.theta_step))
+# plt.show()
+
+fig, ax = plt.subplots()
+ax.imshow(V)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Value')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/VI_value_step_%s.jpg' %(cf.theta_step))
+
+fig, ax = plt.subplots()
+ax.imshow(q)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Q(x)')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/VI_Q_step_%s.jpg' %(cf.theta_step))
+
+# Getting back the objects:
+# with open('Optimal_Control_Pendulum\\plot\\vi_policy_2.pkl') as f:  # Python 3: open(..., 'rb')
+#     policy = pickle.load(f)
 
 a = 5
 

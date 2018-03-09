@@ -3,7 +3,7 @@ from config import cf
 from util import *
 import random
 import copy
-
+import pickle
 
 '''
 # state
@@ -27,49 +27,103 @@ print(['Angular Velocity', cf.w_step])
 print(['Control', cf.u_step])
 
 # initialize policy and value
-cc = [tuple(row) for row in cf.x]
-kk = np.random.choice(cf.u, len(cc)).tolist()
-policy = dict(zip(tuple(cc), kk))
-values = [0] * np.size(cf.x, 0)
-V = dict(zip(cc, values))
+V = np.random.rand(len(cf.theta), len(cf.w)) * 10
+# optimal contol
+policy = np.random.choice(cf.u, len(cf.theta) * len(cf.w)).reshape(len(cf.theta), len(cf.w))
+q = np.zeros((len(cf.theta), len(cf.w)))
 
-diff = 1000000
+diff_p = 10000
 k = 0
-while diff >= cf.diff_ep:
-    old_V = V.copy()
-    for x in cf.x:
-        x_d = x / 100.
-        # policy evaluation
-        u = policy[tuple(x)]
-        cost = computecost(x_d, u)
-        x_new, prob = motion(x_d, u)
-        x_new = np.floor(x_new*100).astype(int).tolist()
-        Vk = np.array([old_V[tuple(i)] for i in x_new])
-        
-        V[tuple(x)] = sum(Vk * prob) * cf.gamma + cost
+while diff_p >= cf.diff_p:
+    # policy evaluation
+    diff_p = 0
+    diff = 100000
+    while diff >= cf.diff_ep:
+        diff = 0
+        for row, theta in enumerate(cf.theta):
+            for col, w  in enumerate(cf.w):
+                x = np.array([theta, w])
+                u = policy[row, col]
+                cost = computecost(x, u)
+                x_new, prob = motion(x, u)
+                Vk = []
+                for xx in x_new:
+                    r, c = findind(xx)
+                    Vk.append(V[r, c])
+                Vk = np.array(Vk)
+                
+                new_V = sum(Vk * prob) * cf.gamma + cost
+                diff += abs(V[row, col] - new_V)
+                V[row, col] = new_V
+        print(['policy Evaluation', ['diff', diff]])
 
-        # policy improvement
-        bl = []
-        for u in cf.u:  
-            cost = computecost(x_d, u) 
-            x_new, prob = motion(x_d, u)
-            x_new = np.floor(x_new*100).astype(int).tolist()
-            Vk = np.array([old_V[tuple(i)] for i in x_new])
-            bl.append(sum(Vk * prob) * cf.gamma + cost)
+    # policy improvement
+    for row, theta in enumerate(cf.theta):
+        for col, w  in enumerate(cf.w):
+            x = np.array([theta, w])
+            bl = []
+            for u in cf.u:
+                cost = computecost(x, u) 
+                x_new, prob = motion(x, u)
+                Vk = []
+                for xx in x_new:
+                    r, c = findind(xx)
+                    Vk.append(V[r, c])
+                Vk = np.array(Vk)
+                bl.append(sum(Vk * prob) * cf.gamma + cost)
             
-        # update policy
-        policy[tuple(x)] = cf.u[np.argmin(bl)]
-
+            # update policy
+            optima_u = cf.u[np.argmin(bl)]
+            diff_p += abs(policy[row, col] - optima_u)
+            policy[row, col] = optima_u
+            q[row, col] = 1 - np.exp(cf.k * np.cos(x[0]) - cf.k)
+            
     k += 1
-    diff = sum(abs(np.array(np.sort(V.values())) - np.array(np.sort(old_V.values()))))
-    print([['step', k], ['diff', diff]])
+    print([['step', k], ['Policy I', diff_p]])
 
+# Saving the objects:
+with open('plot/pi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
+    pickle.dump(policy, f)
 # get traj
 # initial state 
-x0 = np.array(V.keys()[2]) / 100.
+x0 = cf.x0
 theta_seq, u_seq = findseq(x0, policy)
-
 visualization(np.array(theta_seq), np.array(u_seq), 'PI', cf.saveanimate)
+
+fig, ax = plt.subplots()
+ax.imshow(policy)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Policy')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/PI_policy_step_%s.jpg' %(cf.theta_step))
+# plt.show()
+
+fig, ax = plt.subplots()
+ax.imshow(V)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Value')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/PI_value_step_%s.jpg' %(cf.theta_step))
+
+fig, ax = plt.subplots()
+ax.imshow(q)
+# ax.set_xticks(cf.theta)
+ax.set_xticklabels(cf.theta)
+# ax.set_yticks(cf.w)
+ax.set_yticklabels(cf.w)
+plt.title('Q(x)')
+plt.xlabel('theta')
+plt.ylabel('w')
+plt.savefig('plot/PI_Q_step_%s.jpg' %(cf.theta_step))
+
 
 a = 5
 

@@ -19,13 +19,9 @@ def gassian(mean, cov, x):
     y = multivariate_normal.pdf(x, mean = mean, cov = cov)
     return y
 
-def wrap(x):
-    t = int(abs(x / 3.14159))
-    if x < -3.14:
-        x = x + 3.14159 * 2. * t
-    if x > 3.14:
-        x = x - 3.14159 * 2. * t
-    return x
+def wrap(phases):
+    phases = ( phases + np.pi) % (2 * np.pi ) - np.pi
+    return phases
 
 def new_point(x, max, step, cov, olist):
     upper_lim = np.min([x+cov, max])
@@ -37,6 +33,13 @@ def new_point(x, max, step, cov, olist):
     # low = np.flip(np.arange(x, lower_lim - 0.0001, -step)[1:], 0)
     return sample
 
+# find the corresponding ind of x in the list
+def findind(x):
+    theta = x[0]
+    w = x[1]
+    row = np.argmin(abs(cf.theta - theta))
+    col = np.argmin(abs(cf.w - w))
+    return row, col
 
 # output x' and corresponding cost
 # compute corresponding probability
@@ -71,29 +74,55 @@ def motion(x, u):
 #     # grid_z1 = griddata(np.array(policy.keys()), np.array(policy.values()), (x[0], x[1]), method='linear')
 #     z = interpolate.bisplev(x[0], x[1], tck)
 #     return z
+# find second closest ind of x in the list
+def findu(x, policy):
+    theta = x[0]
+    w = x[1]
+    the_l = abs(cf.theta - theta)
+    the_w = abs(cf.w - w)
+    row = np.argmin(the_l)
+    col = np.argmin(the_w)
+    xx = np.array([np.min(the_l), np.min(the_w)])
+    u = policy[row, col]
 
+    the_l[row] = 10000
+    row2 = np.argmin(the_l)
 
-def findseq(x0, f):
+    the_w[col] = 10000
+    col2 = np.argmin(the_w)
+    xx2 = np.array([np.min(the_l), np.min(the_w)])
+    u2 = policy[row2, col2]
+
+    k = (u2 - u) * np.linalg.pinv((xx2 - xx).reshape(2, 1))
+
+    b = u - k.dot(xx)
+
+    y = k.dot(x) + b
+    return y[0]
+
+def findseq(x0, policy):
     theta_seq = []
     theta_seq.append(x0[0])
     u_seq = []
     t = 0
     while t <= cf.T:
-        x_list = np.floor(x0*100).astype(int).tolist()
-        u = f(x0[0], x0[1])
-        # u = policy[tuple(x_list)]
+        u = findu(x0, policy)
         u_seq.append(u)
         # motion model
         fx = np.array([x0[1], cf.a * np.sin(x0[0])- cf.b * x0[1] + u])
+
         x_bar = x0 + fx * cf.dt
         x_bar[0] = wrap(x_bar[0])
 
+        if x_bar[1] >= cf.w_max:
+            x_bar[1] == cf.w_max
+            
         theta_seq.append(x_bar[0])
         x0 = x_bar
         t += cf.dt
-    
-    x_list = np.floor(x0*100).astype(int).tolist()
-    u = f(x_list[0], x_list[1])
+
+    r, c = findind(x0) 
+    u = policy[r, c]
     u_seq.append(u)
     return theta_seq, u_seq
 
