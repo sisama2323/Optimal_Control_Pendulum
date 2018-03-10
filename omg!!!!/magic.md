@@ -6,7 +6,7 @@ class cf:
     # motion model and cost parameter
     a = 1
     b = 0
-    sigma = np.eye(2,2) * 0.8
+    sigma = np.eye(2,2) * 0.001
     k = 0.8
     r = 0.001
     
