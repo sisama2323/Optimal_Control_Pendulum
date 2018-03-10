@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.9)  9 MAR 2018 20:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.9)  9 MAR 2018 21:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -681,45 +681,42 @@ Underfull \hbox (badness 4242) in paragraph at lines 81--86
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--125
+Underfull \hbox (badness 10000) in paragraph at lines 118--130
 
  []
 
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 132.
+put line 137.
 
-Underfull \vbox (badness 1077) has occurred while \output is active []
+Underfull \vbox (badness 6110) has occurred while \output is active []
 
  [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 163--168
+Underfull \hbox (badness 10000) in paragraph at lines 198--203
 
  []
 
-<tri_2246_66.png, id=68, 1084.05pt x 1073.9322pt>
+<tri_2246_66.png, id=70, 1084.05pt x 1073.9322pt>
 File: tri_2246_66.png Graphic file (type png)
  <use tri_2246_66.png>
-Package pdftex.def Info: tri_2246_66.png used on input line 180.
+Package pdftex.def Info: tri_2246_66.png used on input line 215.
 (pdftex.def)             Requested size: 170.71652pt x 169.11244pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<org.png, id=70, 406.14235pt x 477.65953pt>
+<org.png, id=72, 406.14235pt x 477.65953pt>
 File: org.png Graphic file (type png)
  <use org.png>
-Package pdftex.def Info: org.png used on input line 187.
+Package pdftex.def Info: org.png used on input line 222.
 (pdftex.def)             Requested size: 170.71652pt x 200.77597pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<maz_121852_240.png, id=71, 1084.05pt x 1073.9322pt>
+<maz_121852_240.png, id=73, 1084.05pt x 1073.9322pt>
 File: maz_121852_240.png Graphic file (type png)
  <use maz_121852_240.png>
-Package pdftex.def Info: maz_121852_240.png used on input line 194.
+Package pdftex.def Info: maz_121852_240.png used on input line 229.
 (pdftex.def)             Requested size: 170.71652pt x 169.11244pt.
 
 
@@ -736,48 +733,53 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the US letter (8.5in X 11in) paper size.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 221.
-[2 <./tri_2246_66.png> <./org.png> <./maz_121852_240.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 221.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 256.
+[2 <./tri_2246_66.png>] [3
+
+ <./org.png> <./maz_121852_240.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 256.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 221.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 221.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 256.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 256.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 82941270B23FE1D914C17C9E3BD4BF4E;604.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 221.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 256.
  ) 
 Here is how much of TeX's memory you used:
- 10426 strings out of 493029
- 154957 string characters out of 6136235
- 261488 words of memory out of 5000000
+ 10430 strings out of 493029
+ 154999 string characters out of 6136235
+ 264488 words of memory out of 5000000
  13814 multiletter control sequences out of 15000+600000
  44357 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 44i,9n,49p,572b,354s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,12n,49p,572b,354s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm5.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
-mri8a.pfb>
-Output written on report.pdf (2 pages, 1073679 bytes).
+f-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/symbols/msbm5.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ti
+mes/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (3 pages, 1106530 bytes).
 PDF statistics:
- 145 PDF objects out of 1000 (max. 8388607)
- 117 compressed objects within 2 object streams
- 23 named destinations out of 1000 (max. 500000)
+ 169 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
  96 words of extra memory for PDF output out of 10000 (max. 10000000)
 

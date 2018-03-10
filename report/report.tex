@@ -87,24 +87,29 @@ Q = \underset{Q \in \mathbb{Q_{s,\tau}}}{argmin}J^Q
 \subsection{Optimal Control Problem}
 Given a pendulum system with known motion model and cost function, we want to find the optimal control so that we can stabilize the 
 inverted pendulum. The state of the system, $\mathbf{x}$ consists of angle of the pendulum, $\theta$, and angular velocity, $\omega$. 
-The motion model is $\xb' = d\xb + \xb$. 
+The continuous-time dynamics is $\xb' = d\xb + \xb$. 
 Define 
 \begin{equation}
 d\xb = f(\xb, u) * dt + \sigma * dw
 \end{equation}, where $f(\xb, u) = \begin{bmatrix}
 \omega \\ 
 asin(\theta) - b\omega + u
-\end{bmatrix}$, where a > 0 summarizes the eects of gravity, mass and length of the pendulum, b > 0 represents damping and friction, 
-u is the control input and ! is Gaussian motion noise (Brownian motion). The stage cost is 
+\end{bmatrix}$, where $a>0$ summarizes the eects of gravity, mass and length of the pendulum, $b > 0$ represents damping and friction, 
+u is the control input and $\sigma$ is Gaussian motion noise (Brownian motion). Then define the motion model as
+\begin{equation}
+    p_f(\cdot \mid \xb_t, \pi_t) =  \mathcal{N}(\xb+f(\xb, u)*dt, \sigma^T\sigma*dt)
+\end{equation}
+
+The stage cost is 
 \begin{equation}
 g(\xb, u) = 1 - exp(kcos(\theta) - k) + \frac{r}{2}u^2
-\end{equation}, where $k>0$ determines the shape of the cost and r > 0 scales the control cost. Given these information
+\end{equation}, where $k>0$ determines the shape of the cost and r > 0 scales the control cost. Given these information fo the 
+system, we would like to find a policy that minimize the stage cost for each $\xb$.
 
 \textbf{\textit{Problem Formulation}}: 
-
-\begin{math}
-Q = \underset{Q \in \mathbb{Q_{s,\tau}}}{argmin}J^Q_t
-\end{math} with $s\in \mathcal{X}$, $\tau \in \mathcal{X} \ \text{and} \ t = t_{min}$.
+Given motion model $f(\xb, u)$ and cost function $g(\xb, u)$, find the optimal policy $\pi(\xb)$ such that the cost of policy $\pi$,
+$J^{\pi}_0(\xb_0) = \mathbb{E}_{x_{1:T}}\left [  \sum g(\xb_t, \pi_t(\xb_t) \mid \xb_0 \right]$ such that 
+$x_{t+1} \sim p_f(\cdot \mid \xb_t, \pi_t)$, $\xb_t \in \mathcal{X}$, $\pi_t(x_t) \in \mathcal{U}(\xb_t)$. 
 
 
 
@@ -156,6 +161,36 @@ for the case that there is many obstacles in the map, adding heuristic might cau
 
 
 \subsection{Optimal Control}
+First, we will discretize the state space and control space. The pendulum degree is in the range of 
+$\left [ -\pi, \pi \right ]$ and we split into $n_1$ grids, same for control $u \in \left [ -u_{min}, u_{max} \right ]$ with 
+discretization of $n_u$ grids and angular velocity $\omega \in \left [ -u_{min}, u_{max} \right ]$ with discretization of 
+$n_2$. Becasue the motion model contains Gaussian motion noise and discretization, for $\xb'$ we will pick the points that 
+is within one standard deviation of $\mathcal{N}(\bar{\xb}, \sigma^T\sigma*dt)$. For this setup, we need to solve a
+inifinite-horizon problem. As terminal time $T$ goes to infinity, the original problem, 
+$min \ J^{\pi}_0(\xb_0) = \mathbb{E}_{x_{1:T}}\left [  \sum g(\xb_t, \pi_t(\xb_t) \mid \xb_0 \right]$ becomes a time 
+invariant cost-to-go problem. Since there is no terminal state, but future reward should weighted less
+than current rewards. Then we can formulate a dicounted infinite horizon problem which is stationary, 
+\begin{equation}
+    \begin{aligned}
+    J^*(x) =
+        & \underset{u\in \mathcal{U}}{\text{min}}
+        & & g(\xb, u) + \gamma \mathbb{E}_{x'\sim p_f(\cdot \mid \xb, u)} \left [ J^*(\xb') \right ] \text{,} \ \forall \xb \in \mathcal{X} \\
+    \end{aligned}
+\end{equation}
+This is also the Bellman Equation
+\begin{equation}
+    \begin{aligned}
+    J^*(i) =
+        & \underset{u\in \mathcal{U}}{\text{min}}
+        & & g(i, u) + \gamma \sum \left [ P_{ij}^u J^*(j) \right ] \text{,} \ \forall i \in \mathcal{X} \\
+    \end{aligned}
+\end{equation}
+This could be solved using policy iteration or value iteration if the policy statisfies follow two assumptions
+\begin{itemize}
+    \item Proper Stationary Policy: a policy $\pi$ for which there exists int(m) that $P(x_m = 0 \mid x_0 = i) > 0 \forall i \in
+    \mathcal{X}$ 
+    \item Proper Policy Assumption: there should exists at least one proper policy $\pi$
+  \end{itemize}  
 
 
 \section{CONCLUSIONS}

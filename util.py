@@ -12,7 +12,7 @@ from scipy import interpolate
 # compute cost
 def computecost(x, u):
     gx = 1 - np.exp(cf.k * np.cos(x[0]) - cf.k) + cf.r * u**2 / 2.
-    return gx
+    return gx * cf.dt
 
 # compute gaussian distribution
 def gassian(mean, cov, x):
