@@ -82,8 +82,8 @@ while diff_p >= cf.diff_p:
     print([['step', k], ['Policy I', diff_p]])
 
 # Saving the objects:
-with open('plot/pi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
-    pickle.dump(policy, f)
+# with open('plot/pi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
+#     pickle.dump(policy, f)
 # get traj
 # initial state 
 x0 = cf.x0

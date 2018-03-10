@@ -70,8 +70,8 @@ while diff >= cf.diff_ep:
     print([['step', k], ['diff', diff]])
     
 # Saving the objects:
-with open('plot/vi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
-    pickle.dump(policy, f)
+# with open('plot/vi_policy_%s.pkl' %(cf.theta_step), 'w') as f:  # Python 3: open(..., 'wb')
+#     pickle.dump(policy, f)
 
 # interpolation
 # f = interpolate.interp2d(np.array(policy.keys())[:, 0], np.array(policy.keys())[:, 1], np.array(policy.values()), kind='cubic')
