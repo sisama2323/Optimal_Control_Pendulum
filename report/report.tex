@@ -56,6 +56,7 @@ RRT, Value Iteration and Policy Iteration
 
 \newcommand{\xn}{x_{near}}
 \newcommand{\xr}{x_{rand}}
+\newcommand{\xb}{\mathbf{x}}
 
 
 
@@ -84,10 +85,20 @@ Q = \underset{Q \in \mathbb{Q_{s,\tau}}}{argmin}J^Q
 \end{math} with $s\in \mathcal{X}$ and $\tau \in \mathcal{X}$.
 
 \subsection{Optimal Control Problem}
-Given a pendulum with known motion model $x' = f(x, u) * dt$ and cost function $g(x, u)$. We need to find the optimal control policy that allow the pendulum to stay upright.\\
+Given a pendulum system with known motion model and cost function, we want to find the optimal control so that we can stabilize the inverted pendulum. The state of the system, $\mathbf{x}$ consists of angle of the pendulum, $\theta$, and angular velocity, $\omega$. The motion model is $\xb' = d\xb + \xb$. 
+Define 
+\begin{equation}
+d\xb = f(\xb, u) * dt + \sigma * dw
+\end{equation}, where $f(\xb, u) = \begin{bmatrix}
+\omega \\ 
+asin(\theta) - b\omega + u
+\end{bmatrix}$, where a > 0 summarizes the eects of gravity, mass and length of the pendulum, b > 0 represents damping and friction, u is the control input and ! is Gaussian motion noise (Brownian motion). The stage cost is 
+\begin{equation}
+g(\xb, u) = 1 - exp(kcos(\theta) - k) + \frac{r}{2}u^2
+\end{equation}, where k > 0 determines the shape of the cost and r > 0 scales the control cost.
 
 \textbf{\textit{Problem Formulation}}: 
-Given motion model $dx = $
+
 \begin{math}
 Q = \underset{Q \in \mathbb{Q_{s,\tau}}}{argmin}J^Q_t
 \end{math} with $s\in \mathcal{X}$, $\tau \in \mathcal{X} \ \text{and} \ t = t_{min}$.
@@ -161,26 +172,26 @@ the last distance from the exit of maze to the goal can be easily found using he
 larger $\epsilon$, it took less time to find the path. However, $\epsilon$ cannot be too large, otherwise the $\xn$ will frequently 
 collide with obstacles. 
 
-\begin{figure}[h]
-    \centering
-    \subfloat[Triangle]{{\includegraphics[width=6cm]{tri_2246_66.png} }}
-    \caption{RRT: Trangle Map. 2246 sampled points. 66 nodes from start to goal}
-    \label{fig:map1}
- \end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \subfloat[Triangle]{{\includegraphics[width=6cm]{tri_2246_66.png} }}
+%     \caption{RRT: Trangle Map. 2246 sampled points. 66 nodes from start to goal}
+%     \label{fig:map1}
+%  \end{figure}
 
- \begin{figure}[h]
-    \centering
-    \subfloat[Triangle]{{\includegraphics[width=6cm]{org.png} }}
-    \caption{Trangle Map. Optimal Path}
-    \label{fig:map1}
- \end{figure}
+%  \begin{figure}[h]
+%     \centering
+%     \subfloat[Triangle]{{\includegraphics[width=6cm]{org.png} }}
+%     \caption{Trangle Map. Optimal Path}
+%     \label{fig:map1}
+%  \end{figure}
 
- \begin{figure}[h]
-    \centering
-    \subfloat[Triangle]{{\includegraphics[width=6cm]{maz_121852_240.png} }}
-    \caption{RRT: Maze Map. 121852 sampled points. 240 nodes from start to goal}
-    \label{fig:map1}
- \end{figure}
+%  \begin{figure}[h]
+%     \centering
+%     \subfloat[Triangle]{{\includegraphics[width=6cm]{maz_121852_240.png} }}
+%     \caption{RRT: Maze Map. 121852 sampled points. 240 nodes from start to goal}
+%     \label{fig:map1}
+%  \end{figure}
 
  \subsection{Optimal Control}
  
